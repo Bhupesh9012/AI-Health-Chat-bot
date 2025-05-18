@@ -36,54 +36,56 @@ export const HealthRecommendations: React.FC<HealthRecommendationsProps> = ({
 }) => {
   return (
     <div className="w-full my-4">
-      <div className="flex justify-center space-x-4 mb-6">
-        <TabsList className="bg-transparent grid grid-cols-4 gap-2">
-          <TabsTrigger 
-            value="disease" 
-            className="rounded-md bg-orange-400 text-black font-bold hover:bg-orange-500 px-6 py-2 border-none"
-          >
-            Disease
-          </TabsTrigger>
-          <TabsTrigger 
-            value="description" 
-            className="rounded-md bg-blue-400 text-black font-bold hover:bg-blue-500 px-6 py-2 border-none"
-          >
-            Description
-          </TabsTrigger>
-          <TabsTrigger 
-            value="precaution" 
-            className="rounded-md bg-purple-400 text-black font-bold hover:bg-purple-500 px-6 py-2 border-none"
-          >
-            Precaution
-          </TabsTrigger>
-          <TabsTrigger 
-            value="medications" 
-            className="rounded-md bg-red-400 text-black font-bold hover:bg-red-500 px-6 py-2 border-none"
-          >
-            <Pill className="h-4 w-4 mr-2" />
-            <span>Medications</span>
-          </TabsTrigger>
-        </TabsList>
-      </div>
-      
-      <div className="flex justify-center space-x-4">
-        <TabsTrigger 
-          value="workout" 
-          className="rounded-md bg-green-400 text-black font-bold hover:bg-green-500 px-6 py-2 border-none"
-        >
-          <Dumbbell className="h-4 w-4 mr-2" />
-          <span>Workouts</span>
-        </TabsTrigger>
-        <TabsTrigger 
-          value="diet" 
-          className="rounded-md bg-yellow-400 text-black font-bold hover:bg-yellow-500 px-6 py-2 border-none"
-        >
-          <Utensils className="h-4 w-4 mr-2" />
-          <span>Diets</span>
-        </TabsTrigger>
-      </div>
-
-      <Tabs defaultValue="medications" className="mt-6">
+      <Tabs defaultValue="medications" className="w-full">
+        <div className="flex justify-center space-x-4 mb-6">
+          <TabsList className="bg-transparent grid grid-cols-4 gap-2">
+            <TabsTrigger 
+              value="disease" 
+              className="rounded-md bg-orange-400 text-black font-bold hover:bg-orange-500 px-6 py-2 border-none"
+            >
+              Disease
+            </TabsTrigger>
+            <TabsTrigger 
+              value="description" 
+              className="rounded-md bg-blue-400 text-black font-bold hover:bg-blue-500 px-6 py-2 border-none"
+            >
+              Description
+            </TabsTrigger>
+            <TabsTrigger 
+              value="precaution" 
+              className="rounded-md bg-purple-400 text-black font-bold hover:bg-purple-500 px-6 py-2 border-none"
+            >
+              Precaution
+            </TabsTrigger>
+            <TabsTrigger 
+              value="medications" 
+              className="rounded-md bg-red-400 text-black font-bold hover:bg-red-500 px-6 py-2 border-none"
+            >
+              <Pill className="h-4 w-4 mr-2" />
+              <span>Medications</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        
+        <div className="flex justify-center space-x-4 mb-6">
+          <TabsList className="bg-transparent flex space-x-2">
+            <TabsTrigger 
+              value="workout" 
+              className="rounded-md bg-green-400 text-black font-bold hover:bg-green-500 px-6 py-2 border-none"
+            >
+              <Dumbbell className="h-4 w-4 mr-2" />
+              <span>Workouts</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="diet" 
+              className="rounded-md bg-yellow-400 text-black font-bold hover:bg-yellow-500 px-6 py-2 border-none"
+            >
+              <Utensils className="h-4 w-4 mr-2" />
+              <span>Diets</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        
         <TabsContent value="disease">
           <Card className="bg-gray-900 text-white">
             <CardHeader>
