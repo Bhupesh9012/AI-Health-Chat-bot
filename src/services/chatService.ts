@@ -17,11 +17,27 @@ export interface ChatResponse {
   possibleConditions?: string[];
   recommendations?: string[];
   shouldConsultDoctor: boolean;
+  medications?: {
+    name: string;
+    dosage: string;
+    frequency: string;
+    notes?: string;
+  }[];
+  diet?: {
+    suggestions: string[];
+    avoid: string[];
+  };
+  workout?: {
+    type: string;
+    duration: string;
+    frequency: string;
+    notes: string;
+  }[];
 }
 
 const mockResponses: Record<string, ChatResponse> = {
   headache: {
-    analysis: "Headaches can have many causes ranging from stress and dehydration to more serious conditions.",
+    analysis: "Headaches can have many causes ranging from stress and dehydration to more serious conditions. Based on your description, this sounds like it might be a tension headache or possibly a migraine.",
     possibleConditions: [
       "Tension headache",
       "Migraine",
@@ -33,12 +49,25 @@ const mockResponses: Record<string, ChatResponse> = {
       "Rest in a quiet, dark room",
       "Stay hydrated",
       "Try over-the-counter pain relievers if appropriate",
-      "Apply a cold or warm compress"
+      "Apply a cold or warm compress",
+      "Practice relaxation techniques"
     ],
-    shouldConsultDoctor: false
+    shouldConsultDoctor: false,
+    medications: [
+      { name: "Acetaminophen", dosage: "500-1000mg", frequency: "Every 4-6 hours as needed", notes: "Do not exceed 4000mg per day" },
+      { name: "Ibuprofen", dosage: "200-400mg", frequency: "Every 4-6 hours with food", notes: "Avoid if you have stomach ulcers" }
+    ],
+    diet: {
+      suggestions: ["Magnesium-rich foods", "Water (at least 8 glasses per day)", "Ginger tea"],
+      avoid: ["Caffeine", "Alcohol", "Processed foods", "Foods with MSG or nitrates"]
+    },
+    workout: [
+      { type: "Neck stretches", duration: "5-10 minutes", frequency: "2-3 times daily", notes: "Gentle stretching to relieve tension" },
+      { type: "Walking", duration: "20-30 minutes", frequency: "Daily", notes: "Light aerobic exercise can help reduce stress" }
+    ]
   },
   fever: {
-    analysis: "Fever is often a sign that your body is fighting an infection. The severity and duration are important factors to consider.",
+    analysis: "Fever is often a sign that your body is fighting an infection. The severity and duration are important factors to consider. Based on your description, this could be a viral infection like the flu.",
     possibleConditions: [
       "Common cold",
       "Flu",
@@ -49,12 +78,26 @@ const mockResponses: Record<string, ChatResponse> = {
     recommendations: [
       "Rest and stay hydrated",
       "Take acetaminophen or ibuprofen as directed to reduce fever",
-      "Monitor temperature regularly"
+      "Monitor temperature regularly",
+      "Use light clothing and bedding",
+      "Take lukewarm baths if fever is high"
     ],
-    shouldConsultDoctor: true
+    shouldConsultDoctor: true,
+    medications: [
+      { name: "Acetaminophen", dosage: "500-1000mg", frequency: "Every 4-6 hours as needed", notes: "For fever reduction" },
+      { name: "Ibuprofen", dosage: "200-400mg", frequency: "Every 4-6 hours with food", notes: "Alternate with acetaminophen if needed" }
+    ],
+    diet: {
+      suggestions: ["Clear broths", "Water", "Electrolyte drinks", "Easy to digest foods when appetite returns"],
+      avoid: ["Heavy, greasy foods", "Alcohol", "Caffeine"]
+    },
+    workout: [
+      { type: "Rest", duration: "As needed", frequency: "Until fever resolves", notes: "Avoid exercise while feverish" },
+      { type: "Light stretching", duration: "5 minutes", frequency: "As tolerated when fever is gone", notes: "Ease back into activity gradually" }
+    ]
   },
   cough: {
-    analysis: "A cough can be caused by various conditions affecting your respiratory system.",
+    analysis: "A cough can be caused by various conditions affecting your respiratory system. Based on your description, this sounds like it could be an upper respiratory infection or possibly allergies.",
     possibleConditions: [
       "Common cold",
       "Allergies",
@@ -66,12 +109,25 @@ const mockResponses: Record<string, ChatResponse> = {
       "Stay hydrated",
       "Use a humidifier",
       "Try honey for soothing (if over 1 year old)",
-      "Avoid irritants like smoke"
+      "Avoid irritants like smoke",
+      "Use cough drops for temporary relief"
     ],
-    shouldConsultDoctor: false
+    shouldConsultDoctor: false,
+    medications: [
+      { name: "Dextromethorphan", dosage: "As directed on package", frequency: "Every 6-8 hours", notes: "Cough suppressant for dry cough" },
+      { name: "Guaifenesin", dosage: "As directed on package", frequency: "Every 4 hours", notes: "Expectorant for productive cough" }
+    ],
+    diet: {
+      suggestions: ["Warm tea with honey", "Chicken soup", "Clear fluids", "Ginger tea"],
+      avoid: ["Dairy products (can increase mucus production)", "Cold drinks"]
+    },
+    workout: [
+      { type: "Deep breathing", duration: "5 minutes", frequency: "Several times daily", notes: "Helps clear airways" },
+      { type: "Walking", duration: "10-15 minutes", frequency: "If feeling up to it", notes: "Light exercise if not feeling short of breath" }
+    ]
   },
   "chest pain": {
-    analysis: "Chest pain can be caused by various conditions, from minor issues to serious medical emergencies. It's important to take chest pain seriously.",
+    analysis: "Chest pain can be caused by various conditions, from minor issues to serious medical emergencies. It's important to take chest pain seriously. Based on your description, this requires immediate medical attention.",
     possibleConditions: [
       "Muscle strain",
       "Anxiety or panic attack",
@@ -80,12 +136,24 @@ const mockResponses: Record<string, ChatResponse> = {
       "Myocardial infarction (heart attack)"
     ],
     recommendations: [
-      "If severe, sudden, or accompanied by shortness of breath, seek emergency medical attention immediately"
+      "If severe, sudden, or accompanied by shortness of breath, seek emergency medical attention immediately",
+      "Do not drive yourself to the hospital",
+      "Chew an aspirin if advised by emergency services and not allergic"
     ],
-    shouldConsultDoctor: true
+    shouldConsultDoctor: true,
+    medications: [
+      { name: "Aspirin", dosage: "325mg", frequency: "Once (in emergency if advised)", notes: "Only if directed by healthcare provider" }
+    ],
+    diet: {
+      suggestions: ["Heart-healthy diet if chronic", "Low-sodium foods", "Fruits and vegetables"],
+      avoid: ["Fatty foods", "Excessive alcohol", "Caffeine"]
+    },
+    workout: [
+      { type: "Rest", duration: "Until evaluated by doctor", frequency: "N/A", notes: "Avoid exercise until cleared by healthcare provider" }
+    ]
   },
   "stomach pain": {
-    analysis: "Abdominal pain can be caused by many conditions, from temporary digestive issues to more serious problems.",
+    analysis: "Abdominal pain can be caused by many conditions, from temporary digestive issues to more serious problems. Based on your description, this could be indigestion or possibly a mild stomach virus.",
     possibleConditions: [
       "Indigestion",
       "Gas or bloating",
@@ -97,9 +165,23 @@ const mockResponses: Record<string, ChatResponse> = {
     recommendations: [
       "Try to rest and avoid solid foods temporarily",
       "Stay hydrated",
-      "Use a heating pad for comfort"
+      "Use a heating pad for comfort",
+      "Try over-the-counter antacids if appropriate",
+      "Monitor for worsening symptoms"
     ],
-    shouldConsultDoctor: false
+    shouldConsultDoctor: false,
+    medications: [
+      { name: "Antacid", dosage: "As directed on package", frequency: "After meals and at bedtime", notes: "For heartburn or indigestion" },
+      { name: "Bismuth subsalicylate", dosage: "As directed on package", frequency: "Every 4 hours", notes: "For diarrhea or upset stomach" }
+    ],
+    diet: {
+      suggestions: ["BRAT diet (bananas, rice, applesauce, toast)", "Clear broths", "Ginger ale or ginger tea"],
+      avoid: ["Spicy foods", "Fatty foods", "Dairy", "Caffeine", "Alcohol"]
+    },
+    workout: [
+      { type: "Rest", duration: "Until symptoms improve", frequency: "N/A", notes: "Avoid exercise during acute symptoms" },
+      { type: "Walking", duration: "10 minutes", frequency: "After feeling better", notes: "Gentle movement can help digestive system" }
+    ]
   }
 };
 

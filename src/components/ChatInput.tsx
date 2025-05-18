@@ -1,14 +1,18 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useChatContext } from '@/contexts/ChatContext';
 import { analyzeSymptoms } from '@/services/chatService';
+import { Mic, MicOff } from 'lucide-react';
+import { toast } from 'sonner';
 
 export const ChatInput: React.FC = () => {
   const [input, setInput] = useState('');
   const { addMessage, setIsTyping } = useChatContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +33,6 @@ export const ChatInput: React.FC = () => {
       // Send request to analyze symptoms
       const response = await analyzeSymptoms({
         symptoms: userMessage,
-        // In a real app, we would extract more structured data here
       });
       
       // Generate assistant response
@@ -37,14 +40,14 @@ export const ChatInput: React.FC = () => {
       
       if (response.possibleConditions && response.possibleConditions.length > 0) {
         assistantResponse += "\n\nPossible conditions to consider:\n";
-        response.possibleConditions.forEach((condition, index) => {
+        response.possibleConditions.forEach((condition) => {
           assistantResponse += `• ${condition}\n`;
         });
       }
       
       if (response.recommendations && response.recommendations.length > 0) {
         assistantResponse += "\n\nRecommendations:\n";
-        response.recommendations.forEach((rec, index) => {
+        response.recommendations.forEach((rec) => {
           assistantResponse += `• ${rec}\n`;
         });
       }
@@ -61,6 +64,58 @@ export const ChatInput: React.FC = () => {
     } finally {
       setIsTyping(false);
       setIsSubmitting(false);
+    }
+  };
+
+  const toggleVoiceInput = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+
+  const startRecording = () => {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      toast.error("Voice recognition is not supported in your browser");
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognitionRef.current = new SpeechRecognition();
+    const recognition = recognitionRef.current;
+
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      const speechResult = event.results[0][0].transcript;
+      setInput((prevInput) => prevInput + ' ' + speechResult.trim());
+      stopRecording();
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error', event.error);
+      toast.error('Error recognizing voice. Please try again.');
+      stopRecording();
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.start();
+    setIsRecording(true);
+    toast.info("Listening...", {
+      description: "Speak clearly into your microphone"
+    });
+  };
+
+  const stopRecording = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
     }
   };
 
@@ -82,13 +137,25 @@ export const ChatInput: React.FC = () => {
           className="resize-none min-h-[60px] flex-1"
           disabled={isSubmitting}
         />
-        <Button 
-          type="submit" 
-          disabled={isSubmitting || input.trim() === ''}
-          className="self-end h-10 px-5"
-        >
-          Send
-        </Button>
+        <div className="flex flex-col gap-2">
+          <Button
+            type="button"
+            onClick={toggleVoiceInput}
+            variant={isRecording ? "destructive" : "outline"}
+            size="icon"
+            className="self-end h-10 w-10"
+            disabled={isSubmitting}
+          >
+            {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+          </Button>
+          <Button 
+            type="submit" 
+            disabled={isSubmitting || input.trim() === ''}
+            className="self-end h-10 px-5"
+          >
+            Send
+          </Button>
+        </div>
       </div>
     </form>
   );
