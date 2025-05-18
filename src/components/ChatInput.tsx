@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useChatContext } from '@/contexts/ChatContext';
 import { analyzeSymptoms } from '@/services/chatService';
-import { Mic, MicOff, SendHorizonal } from 'lucide-react';
+import { Mic, MicOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const ChatInput: React.FC = () => {
@@ -127,37 +127,50 @@ export const ChatInput: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-4">
-      <div className="flex gap-2">
+    <div className="rounded-lg p-6 bg-black">
+      <h2 className="text-xl font-bold text-white text-center mb-4">Health Care Center</h2>
+      
+      <div className="mb-4">
+        <p className="text-gray-300 mb-2">Select Symptoms:</p>
         <Textarea
-          placeholder="Describe your symptoms..."
+          placeholder="type symptoms such as itching, sleeping, aching etc."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="resize-none min-h-[60px] flex-1 shadow-sm border-blue-100 dark:border-gray-700 focus-visible:ring-primary"
+          className="resize-none min-h-[60px] w-full bg-white text-black rounded-md mb-2"
           disabled={isSubmitting}
         />
-        <div className="flex flex-col gap-2">
-          <Button
-            type="button"
-            onClick={toggleVoiceInput}
-            variant={isRecording ? "destructive" : "outline"}
-            size="icon"
-            className="self-end h-10 w-10 shadow-sm hover:shadow-md transition-shadow border-blue-100 dark:border-gray-700"
-            disabled={isSubmitting}
-          >
-            {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-          </Button>
-          <Button 
-            type="submit" 
-            disabled={isSubmitting || input.trim() === ''}
-            className="self-end h-10 px-5 shadow-sm hover:shadow-md transition-shadow flex gap-2 items-center"
-          >
-            <span>Send</span>
-            <SendHorizonal className="h-4 w-4" />
-          </Button>
-        </div>
       </div>
-    </form>
+
+      <div className="flex space-x-2">
+        <Button
+          type="button"
+          onClick={toggleVoiceInput}
+          variant="default"
+          className={`${isRecording ? 'bg-red-500' : 'bg-blue-500'} text-white rounded-md px-4 py-2`}
+          disabled={isSubmitting}
+        >
+          {isRecording ? (
+            <>
+              <MicOff className="h-4 w-4 mr-2" />
+              Stop Speech Recognition
+            </>
+          ) : (
+            <>
+              <Mic className="h-4 w-4 mr-2" />
+              Start Speech Recognition
+            </>
+          )}
+        </Button>
+
+        <Button 
+          onClick={handleSubmit}
+          disabled={isSubmitting || input.trim() === ''}
+          className="bg-red-500 hover:bg-red-600 text-white rounded-md px-8 py-2 w-full"
+        >
+          Predict
+        </Button>
+      </div>
+    </div>
   );
 };

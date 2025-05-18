@@ -12,7 +12,7 @@ const Index = () => {
 
   if (showPrivacyNotice) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <PrivacyNotice onDismiss={() => setShowPrivacyNotice(false)} />
       </div>
     );
@@ -20,7 +20,7 @@ const Index = () => {
 
   return (
     <ChatProvider>
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
+      <div className="min-h-screen flex flex-col bg-black">
         <Header />
         
         <main className="flex flex-1 overflow-hidden">
@@ -29,18 +29,17 @@ const Index = () => {
             <div className="flex-1 overflow-hidden">
               <ChatContainer />
             </div>
-            <div className="p-4 border-t bg-white/80 backdrop-blur-sm dark:bg-gray-800/80">
+            <div className="p-4 border-t bg-gray-900">
               <ChatInput />
             </div>
           </div>
           
           {/* Sidebar */}
-          <div className="hidden md:block w-96 border-l overflow-y-auto p-4 bg-white/70 backdrop-blur-sm dark:bg-gray-800/70">
+          <div className="hidden md:block w-96 border-l overflow-y-auto p-4 bg-gray-900">
             <div className="space-y-4">
               <InfoCard 
-                title="How to use HealthChat" 
+                title="How to use Health Center" 
                 description="Get the most out of your consultation"
-                className="shadow-md hover:shadow-lg transition-all border-blue-100 dark:border-gray-700"
               >
                 <ul className="text-sm space-y-2">
                   <li className="flex items-center gap-2">
@@ -64,7 +63,6 @@ const Index = () => {
               
               <InfoCard 
                 title="Medical Disclaimer"
-                className="shadow-md hover:shadow-lg transition-all border-blue-100 dark:border-gray-700"
               >
                 <p className="text-sm text-muted-foreground">
                   This AI assistant provides general information only and is not a substitute for professional medical advice. Always consult a healthcare provider for medical concerns.
