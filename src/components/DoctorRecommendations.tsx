@@ -41,7 +41,7 @@ export const DoctorRecommendations: React.FC = () => {
     if (doctor) {
       addMessage('system', `You've requested to connect with ${doctor.name}. In a real application, this would initiate a consultation request.`);
       toast.success(`Request sent to ${doctor.name}`, {
-        description: 'We'll notify you when they respond.'
+        description: "We'll notify you when they respond."
       });
     }
   };
