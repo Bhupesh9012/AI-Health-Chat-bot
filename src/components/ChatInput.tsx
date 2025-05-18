@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useChatContext } from '@/contexts/ChatContext';
 import { analyzeSymptoms } from '@/services/chatService';
-import { Mic, MicOff } from 'lucide-react';
+import { Mic, MicOff, SendHorizonal } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const ChatInput: React.FC = () => {
@@ -12,7 +12,7 @@ export const ChatInput: React.FC = () => {
   const { addMessage, setIsTyping } = useChatContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,13 +89,13 @@ export const ChatInput: React.FC = () => {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: any) => {
       const speechResult = event.results[0][0].transcript;
       setInput((prevInput) => prevInput + ' ' + speechResult.trim());
       stopRecording();
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
       console.error('Speech recognition error', event.error);
       toast.error('Error recognizing voice. Please try again.');
       stopRecording();
@@ -134,7 +134,7 @@ export const ChatInput: React.FC = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="resize-none min-h-[60px] flex-1"
+          className="resize-none min-h-[60px] flex-1 shadow-sm border-blue-100 dark:border-gray-700 focus-visible:ring-primary"
           disabled={isSubmitting}
         />
         <div className="flex flex-col gap-2">
@@ -143,7 +143,7 @@ export const ChatInput: React.FC = () => {
             onClick={toggleVoiceInput}
             variant={isRecording ? "destructive" : "outline"}
             size="icon"
-            className="self-end h-10 w-10"
+            className="self-end h-10 w-10 shadow-sm hover:shadow-md transition-shadow border-blue-100 dark:border-gray-700"
             disabled={isSubmitting}
           >
             {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
@@ -151,9 +151,10 @@ export const ChatInput: React.FC = () => {
           <Button 
             type="submit" 
             disabled={isSubmitting || input.trim() === ''}
-            className="self-end h-10 px-5"
+            className="self-end h-10 px-5 shadow-sm hover:shadow-md transition-shadow flex gap-2 items-center"
           >
-            Send
+            <span>Send</span>
+            <SendHorizonal className="h-4 w-4" />
           </Button>
         </div>
       </div>

@@ -40,37 +40,37 @@ export const HealthRecommendations: React.FC<HealthRecommendationsProps> = ({
   } 
 }) => {
   return (
-    <Card className="w-full my-4">
-      <CardHeader>
-        <CardTitle className="text-lg">{condition} Recommendations</CardTitle>
+    <Card className="w-full my-4 shadow-lg border-blue-100 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-t-lg">
+        <CardTitle className="text-lg text-primary">{condition} Recommendations</CardTitle>
         <CardDescription>Suggested care plan based on your symptoms</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-4">
         <Tabs defaultValue="medications">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="medications">
+          <TabsList className="grid w-full grid-cols-4 mb-4">
+            <TabsTrigger value="medications" className="data-[state=active]:shadow-md transition-all">
               <Pill className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Medications</span>
             </TabsTrigger>
-            <TabsTrigger value="diet">
+            <TabsTrigger value="diet" className="data-[state=active]:shadow-md transition-all">
               <Utensils className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Diet</span>
             </TabsTrigger>
-            <TabsTrigger value="workout">
+            <TabsTrigger value="workout" className="data-[state=active]:shadow-md transition-all">
               <Dumbbell className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Exercise</span>
             </TabsTrigger>
-            <TabsTrigger value="images">
+            <TabsTrigger value="images" className="data-[state=active]:shadow-md transition-all">
               <CalendarIcon className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Images</span>
             </TabsTrigger>
           </TabsList>
           
           <TabsContent value="medications" className="mt-4">
-            <ScrollArea className="h-[280px]">
+            <ScrollArea className="h-[280px] pr-4">
               {recommendations.medications && recommendations.medications.map((med, idx) => (
-                <div key={idx} className="mb-4 p-3 border rounded-md">
-                  <h4 className="font-semibold">{med.name}</h4>
+                <div key={idx} className="mb-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-all bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
+                  <h4 className="font-semibold text-primary">{med.name}</h4>
                   <p className="text-sm text-muted-foreground">
                     <span className="font-medium">Dosage:</span> {med.dosage}
                   </p>
@@ -92,10 +92,10 @@ export const HealthRecommendations: React.FC<HealthRecommendationsProps> = ({
           </TabsContent>
           
           <TabsContent value="diet" className="mt-4">
-            <ScrollArea className="h-[280px]">
+            <ScrollArea className="h-[280px] pr-4">
               {recommendations.diet && recommendations.diet.map((item, idx) => (
-                <div key={idx} className="mb-4 p-3 border rounded-md">
-                  <h4 className="font-semibold">{item.meal}</h4>
+                <div key={idx} className="mb-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-all bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
+                  <h4 className="font-semibold text-primary">{item.meal}</h4>
                   <p className="text-sm">{item.description}</p>
                 </div>
               ))}
@@ -107,10 +107,10 @@ export const HealthRecommendations: React.FC<HealthRecommendationsProps> = ({
           </TabsContent>
           
           <TabsContent value="workout" className="mt-4">
-            <ScrollArea className="h-[280px]">
+            <ScrollArea className="h-[280px] pr-4">
               {recommendations.workout && recommendations.workout.map((exercise, idx) => (
-                <div key={idx} className="mb-4 p-3 border rounded-md">
-                  <h4 className="font-semibold">{exercise.name}</h4>
+                <div key={idx} className="mb-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-all bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
+                  <h4 className="font-semibold text-primary">{exercise.name}</h4>
                   <p className="text-sm text-muted-foreground">
                     <span className="font-medium">Duration:</span> {exercise.duration} | 
                     <span className="font-medium ml-1">Frequency:</span> {exercise.frequency}
@@ -126,16 +126,18 @@ export const HealthRecommendations: React.FC<HealthRecommendationsProps> = ({
           </TabsContent>
           
           <TabsContent value="images" className="mt-4">
-            <ScrollArea className="h-[280px]">
+            <ScrollArea className="h-[280px] pr-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {recommendations.images && recommendations.images.map((image, idx) => (
-                  <div key={idx} className="relative">
+                  <div key={idx} className="relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all">
                     <img 
                       src={image.url} 
                       alt={image.description}
-                      className="w-full h-40 object-cover rounded-md" 
+                      className="w-full h-40 object-cover" 
                     />
-                    <p className="text-xs text-muted-foreground mt-1">{image.description}</p>
+                    <div className="p-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                      <p className="text-xs text-muted-foreground">{image.description}</p>
+                    </div>
                   </div>
                 ))}
               </div>
