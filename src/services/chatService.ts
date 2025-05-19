@@ -182,7 +182,79 @@ const mockResponses: Record<string, ChatResponse> = {
       { type: "Rest", duration: "Until symptoms improve", frequency: "N/A", notes: "Avoid exercise during acute symptoms" },
       { type: "Walking", duration: "10 minutes", frequency: "After feeling better", notes: "Gentle movement can help digestive system" }
     ]
-  }
+  },
+  piles: {
+  analysis: "Piles (hemorrhoids) are swollen veins in the lower rectum/anus caused by increased pressure. Common triggers include constipation, straining during bowel movements, pregnancy, or prolonged sitting.",
+  possibleConditions: [
+    "Internal hemorrhoids (usually painless but may bleed)",
+    "External hemorrhoids (painful, itchy, may thrombose)",
+    "Anal fissure (can mimic hemorrhoid symptoms)",
+    "Rectal prolapse",
+    "Rarely: Colorectal conditions needing medical evaluation"
+  ],
+  recommendations: [
+    "Increase fiber intake to soften stools",
+    "Use over-the-counter hemorrhoid creams for symptom relief",
+    "Take warm sitz baths 2-3 times daily",
+    "Avoid straining during bowel movements",
+    "Keep the anal area clean (use moist wipes instead of dry toilet paper)"
+  ],
+  shouldConsultDoctor:false, 
+  medications: [
+    { 
+      name: "Hydrocortisone cream (1%)", 
+      dosage: "Apply thin layer", 
+      frequency: "2-4 times daily", 
+      notes: "Max 7 days unless directed by doctor" 
+    },
+    { 
+      name: "Witch hazel pads (Tucks)", 
+      dosage: "Apply as needed", 
+      frequency: "3-4 times daily", 
+      notes: "Natural astringent to reduce swelling" 
+    },
+    { 
+      name: "Psyllium husk (Metamucil)", 
+      dosage: "1-2 teaspoons", 
+      frequency: "1-3 times daily with water", 
+      notes: "Fiber supplement to prevent constipation" 
+    }
+  ],
+  diet: {
+    suggestions: [
+      "High-fiber foods (whole grains, fruits, vegetables)",
+      "Prunes or prune juice (natural laxative)",
+      "Water (minimum 8 glasses/day)",
+      "Flaxseeds or chia seeds"
+    ],
+    avoid: [
+      "Spicy foods",
+      "Alcohol (dehydrating)",
+      "Processed foods low in fiber",
+      "Excessive dairy (can cause constipation)"
+    ]
+  },
+  workout: [
+    { 
+      type: "Kegel exercises", 
+      duration: "5-10 minutes", 
+      frequency: "Daily", 
+      notes: "Strengthens pelvic floor muscles" 
+    },
+    { 
+      type: "Walking", 
+      duration: "20-30 minutes", 
+      frequency: "Daily", 
+      notes: "Promotes bowel regularity" 
+    },
+    { 
+      type: "Yoga (Child's Pose, Legs-Up-the-Wall)", 
+      duration: "10-15 minutes", 
+      frequency: "3-4 times weekly", 
+      notes: "Improves circulation to rectal area" 
+    }
+  ]
+}
 };
 
 export const analyzeSymptoms = async (request: SymptomRequest): Promise<ChatResponse> => {

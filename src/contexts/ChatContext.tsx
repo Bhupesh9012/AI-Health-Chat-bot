@@ -27,6 +27,8 @@ interface ChatContextType {
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const useChatContext = () => {
   const context = useContext(ChatContext);
   if (!context) {
@@ -81,7 +83,18 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       'Back Pain': ['back pain', 'back', 'spine', 'posture'],
       'Insomnia': ['sleep', 'insomnia', 'can\'t sleep', 'trouble sleeping', 'sleepless'],
       'Anxiety': ['anxiety', 'anxious', 'panic', 'stress', 'worried'],
-      'Depression': ['depression', 'depressed', 'sad', 'low mood', 'hopeless']
+      'Depression': ['depression', 'depressed', 'sad', 'low mood', 'hopeless'],
+      'Piles': ['piles', 'hemorrhoids', 'piles pain', 'swollen veins', 'anal discomfort']
+      // 'High Blood Pressure': ['hypertension', 'high blood pressure', 'elevated BP', 'blood pressure'],
+      // 'Diabetes': ['diabetes', 'high blood sugar', 'hyperglycemia', 'insulin'],
+      // 'Obesity': ['obesity', 'overweight', 'BMI', 'weight gain'],
+      // 'Heart Disease': ['heart disease', 'cardiovascular', 'coronary artery', 'heart attack'],
+      // 'High Cholesterol': ['high cholesterol', 'LDL', 'HDL', 'triglycerides'],
+      // 'Sleep Apnea': ['sleep apnea', 'snoring', 'breathing during sleep', 'obstructive sleep apnea'],
+      // 'Asthma': ['asthma', 'wheezing', 'shortness of breath', 'bronchospasm'],
+      // 'Arthritis': ['arthritis', 'joint pain', 'inflammation', 'stiffness'],
+      // 'Skin Rash': ['skin rash', 'dermatitis', 'eczema', 'hives'],
+      // 'Fatigue': ['fatigue', 'tiredness', 'exhaustion', 'low energy']
     };
     
     // Check each condition's keywords against the content
@@ -275,7 +288,69 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
           { name: 'Social Activities', duration: 'Varies', frequency: 'Several times weekly', description: 'Group exercise classes or team sports' },
           { name: 'Nature Walks', duration: '30-60 minutes', frequency: '3-4 times weekly', description: 'Combining exercise with nature exposure' }
         ]
-      }
+      },
+      'Piles': {
+    condition: 'Piles (Hemorrhoids) Relief',
+    medications: [
+        {
+            name: 'Hydrocortisone Cream',
+            dosage: 'Apply thin layer',
+            frequency: '2-4 times daily',
+            notes: 'Do not use for more than 7 days unless directed by a doctor'
+        },
+        {
+            name: 'Witch Hazel Pads',
+            dosage: 'Apply as needed',
+            frequency: '3-4 times daily',
+            notes: 'Helps soothe itching and inflammation'
+        },
+        {
+            name: 'Stool Softeners (Docusate Sodium)',
+            dosage: '50-300mg',
+            frequency: 'Once or twice daily',
+            notes: 'Prevents straining during bowel movements'
+        }
+    ],
+    diet: [
+        {
+            meal: 'General',
+            description: 'High-fiber diet (25-30g per day) to prevent constipation'
+        },
+        {
+            meal: 'Foods to include',
+            description: 'Whole grains, fruits (berries, prunes), vegetables (broccoli, carrots), legumes (lentils, beans)'
+        },
+        {
+            meal: 'Foods to avoid',
+            description: 'Spicy foods, processed foods, excessive dairy, alcohol (can worsen symptoms)'
+        },
+        {
+            meal: 'Drinks',
+            description: 'Plenty of water (8-10 glasses/day), herbal teas (chamomile, aloe vera juice)'
+        }
+    ],
+    workout: [
+        {
+            name: 'Kegel Exercises',
+            duration: '5-10 minutes',
+            frequency: 'Daily',
+            description: 'Strengthens pelvic floor muscles and improves blood flow'
+        },
+        {
+            name: 'Walking',
+            duration: '20-30 minutes',
+            frequency: 'Daily',
+            description: 'Promotes digestion and reduces pressure on rectal veins'
+        },
+        {
+            name: 'Yoga (Pelvic Relaxation Poses)',
+            duration: '15-20 minutes',
+            frequency: '3-4 times per week',
+            description: 'Poses like Child’s Pose and Legs-Up-the-Wall help circulation'
+        }
+    ]
+}
+      
     };
     
     // Set the recommendation based on the condition
@@ -304,6 +379,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         setIsTyping,
         clearMessages,
         setCurrentRecommendation,
+
       }}
     >
       {children}

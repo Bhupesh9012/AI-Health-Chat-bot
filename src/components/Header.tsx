@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { HeartPulse } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   className?: string;
@@ -17,14 +17,14 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
           </div>
           <h1 className="text-xl font-bold text-white">Health Center</h1>
         </div>
-        
+
         <nav>
           <ul className="flex items-center space-x-6">
-            <li><a href="#" className="text-white hover:text-gray-300">Home</a></li>
-            <li><a href="#" className="text-white hover:text-gray-300">About</a></li>
-            <li><a href="#" className="text-white hover:text-gray-300">Contact</a></li>
-            <li><a href="#" className="text-white hover:text-gray-300">Developer</a></li>
-            <li><a href="#" className="text-white hover:text-gray-300">Blog</a></li>
+            <li><Link to="/" className="text-white hover:text-gray-300">Home</Link></li>
+            <li><Link to="/about" className="text-white hover:text-gray-300">About</Link></li>
+            <li><Link to="/contact" className="text-white hover:text-gray-300">Contact</Link></li>
+            <li><Link to="/developer" className="text-white hover:text-gray-300">Developer</Link></li>
+            <li><Link to="/blog" className="text-white hover:text-gray-300">Blog</Link></li>
           </ul>
         </nav>
       </div>

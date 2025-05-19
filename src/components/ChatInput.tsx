@@ -6,6 +6,8 @@ import { useChatContext } from '@/contexts/ChatContext';
 import { analyzeSymptoms } from '@/services/chatService';
 import { Mic, MicOff, Send } from 'lucide-react';
 import { toast } from 'sonner';
+import axios from "axios";
+import ReactMarkdown from 'react-markdown';
 
 export const ChatInput: React.FC = () => {
   const [input, setInput] = useState('');
@@ -15,7 +17,8 @@ export const ChatInput: React.FC = () => {
   const [isPermissionDenied, setIsPermissionDenied] = useState(false);
   const recognitionRef = useRef<any>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+   const [response, setResponse] = useState("");
+  const [loading,setloading]=useState(false);
   // Focus textarea on mount
   useEffect(() => {
     textareaRef.current?.focus();
@@ -74,6 +77,29 @@ export const ChatInput: React.FC = () => {
       // Focus back on textarea after submission
       textareaRef.current?.focus();
     }
+  };
+
+  const apiKey= import.meta.env.VITE_GEMINI_API_KEY;
+  console.log("thisis the api", apiKey)
+
+  const handleSend=async()=>{
+    if(!input.trim())return;
+    setloading(true);
+    try{
+      const res=await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+    {
+     contents: [{ parts: [{ text: input }] }]
+  },
+  {headers:{"Content-type":"application/json"}}
+  );
+  const reply = res.data.candidates[0]?.content?.parts[0]?.text;
+      setResponse(reply || "No response from Gemini.");
+    } catch (error) {
+      console.error("Error:", error);
+      setResponse("Error connecting to Gemini.");
+    }
+    setloading(false);
   };
 
   const toggleVoiceInput = async () => {
@@ -163,7 +189,8 @@ export const ChatInput: React.FC = () => {
   };
 
   return (
-    <div className="rounded-lg p-6 bg-gradient-to-b from-gray-900 to-black border border-gray-800">
+    <div className="rounded-lg p-6 bg-gradient-to-b from-gray-900 to-black border border-gray-800 ">
+
       <h2 className="text-xl font-bold text-white text-center mb-4">Health Care Center</h2>
       
       <div className="mb-4 relative">
@@ -177,6 +204,13 @@ export const ChatInput: React.FC = () => {
           className="resize-none min-h-[80px] w-full bg-gray-800 text-white rounded-md mb-2 border-gray-700 focus:border-blue-500 transition-colors"
           disabled={isSubmitting}
         />
+      </div>
+      <div style={{ marginTop: 20 }}>
+        <strong>Gemini:</strong>
+         <div className='text-white' style={{ whiteSpace: "pre-wrap" }}>
+    <ReactMarkdown>{response}</ReactMarkdown>
+  </div>
+
       </div>
 
       <div className="flex space-x-3">
@@ -207,8 +241,8 @@ export const ChatInput: React.FC = () => {
         </Button>
 
         <Button 
-          onClick={handleSubmit}
-          disabled={isSubmitting || input.trim() === ''}
+          onClick={handleSend}
+          disabled={loading || input.trim() === ''}
           className="bg-green-600 hover:bg-green-700 text-white rounded-md px-8 py-2 flex-1 transition-colors flex items-center justify-center"
         >
           <Send className="h-4 w-4 mr-2" />
