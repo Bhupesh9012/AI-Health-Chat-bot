@@ -17,8 +17,11 @@ export const ChatInput: React.FC = () => {
   const [isPermissionDenied, setIsPermissionDenied] = useState(false);
   const recognitionRef = useRef<any>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-   const [response, setResponse] = useState("");
+  const [response, setResponse] = useState("");
   const [loading,setloading]=useState(false);
+  const [conversationContext, setConversationContext] = useState<{role: string, content: string}[]>([]);
+  const [awaitingFollowUp, setAwaitingFollowUp] = useState(false);
+
   // Focus textarea on mount
   useEffect(() => {
     textareaRef.current?.focus();
@@ -82,25 +85,64 @@ export const ChatInput: React.FC = () => {
   const apiKey= import.meta.env.VITE_GEMINI_API_KEY;
   console.log("thisis the api", apiKey)
 
-  const handleSend=async()=>{
-    if(!input.trim())return;
-    setloading(true);
-    try{
-      const res=await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-    {
-     contents: [{ parts: [{ text: input }] }]
-  },
-  {headers:{"Content-type":"application/json"}}
-  );
-  const reply = res.data.candidates[0]?.content?.parts[0]?.text;
-      setResponse(reply || "No response from Gemini.");
-    } catch (error) {
-      console.error("Error:", error);
-      setResponse("Error connecting to Gemini.");
+  const handleSend = async () => {
+  if (!input.trim()) return;
+  setloading(true);
+  
+  const patientInput = input.trim();
+  addMessage('user', patientInput);
+  setConversationContext(prev => [...prev, { role: 'user', content: patientInput }]);
+  setInput("");
+
+  // Build full prompt with history
+  const historyText = conversationContext.map(msg => `${msg.role === 'user' ? "Patient" : "Doctor"}: ${msg.content}`).join('\n');
+
+  const prompt = `
+You are Dr. Nova, a smart, caring virtual doctor.
+Respond with both:
+1. An empathetic, medically correct response to the symptoms.
+2. One or two relevant follow-up questions if needed.
+
+Avoid redundant intros like "Based on your symptoms..."
+Avoid disclaimers like "I am an AI..."
+Speak as a real human doctor would.
+
+${historyText}
+Patient: ${patientInput}
+Doctor:
+  `;
+
+  try {
+    const res = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    const reply = res.data.candidates[0]?.content?.parts[0]?.text || "No response.";
+    
+    addMessage("assistant", reply);
+    setConversationContext(prev => [...prev, { role: 'assistant', content: reply }]);
+    setResponse(reply);
+
+    // If reply contains follow-up question(s), set flag
+    if (/(\?)/.test(reply)) {
+      setAwaitingFollowUp(true);
+    } else {
+      setAwaitingFollowUp(false);
     }
-    setloading(false);
-  };
+  } catch (error) {
+    console.error("Gemini error:", error);
+    const errMsg = "Sorry, I couldn't connect right now.";
+    setResponse(errMsg);
+    addMessage("assistant", errMsg);
+  }
+
+  setloading(false);
+};
+
 
   const toggleVoiceInput = async () => {
     if (isRecording) {
@@ -182,11 +224,17 @@ export const ChatInput: React.FC = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    if (awaitingFollowUp) {
+      handleSend(); // treat as follow-up answer
+      setAwaitingFollowUp(false); // reset flag
+    } else {
+      handleSend(); // standard new input
     }
-  };
+  }
+};
+
 
   return (
     <div className="rounded-lg p-6 bg-gradient-to-b from-gray-900 to-black border border-gray-800 ">
